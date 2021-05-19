@@ -24,7 +24,7 @@ spec:
      # terminationGracePeriodSeconds: {{ .Values.defaultTerminationGracePeriodSeconds }}
       containers:
       - name: token-rotate
-        image: gcr.io/sap-cx-dt-api-dev/{{ .Values.image.name }}:{{ .Values.image.tag }}
+        image: gcr.io/sap-cx-dt-api-dev/{{ .Values.image }}
         imagePullPolicy: Always
         resources:
           limits:
