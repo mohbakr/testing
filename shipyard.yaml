@@ -10,5 +10,5 @@ spec:
       tasks:
       - name: deployment
         properties:
-          deploymentstrategy: blue_green_service
+          deploymentstrategy: user_managed
       - name: evaluation
