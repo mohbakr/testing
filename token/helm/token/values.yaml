@@ -23,4 +23,4 @@ hpa:
 httpsPort: 443
 image: tokenrotate-service:1.0.0-20200215020106_97afb541fe0030c2f29bcc9a5916c20e27ab6b3d
 internalPort: 8080
-ns: dev
+ns: testing-dev
