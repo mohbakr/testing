@@ -1,0 +1,30 @@
+ns: dev
+externalPort: 8080
+internalPort: 8080
+httpsPort: 443
+image:
+  name: tokenrotate-service
+  tag: 1.0.0-20200215020106_97afb541fe0030c2f29bcc9a5916c20e27ab6b3d
+
+defaultLivenessFailureThreshold: 1
+defaultLivenessInitialDelaySeconds: 5
+defaultLivenessPeriodSeconds: 10
+defaultLivenessSuccessThreshold: 1
+defaultLivenessTimeoutSeconds: 1
+defaultReadinessFailureThreshold: 1
+defaultReadinessInitialDelaySeconds: 2
+defaultReadinessPeriodSeconds: 10
+defaultReadinessSuccessThreshold: 1
+defaultReadinessTimeoutSeconds: 1
+defaultTerminationGracePeriodSeconds: 60
+
+foundation:
+  observabilityTokenRotateService:
+    hpa:
+      cpuTargetAverageValue: 100m
+    maxSurge: 5
+    maxUnavailable: 0
+    maxreplicas: 3
+    replicas: 1
+hpa:
+  targetCPUUtilizationPercentage: 85

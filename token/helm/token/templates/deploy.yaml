@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: observability-tokenrotate-service
+  namespace: {{ .Values.ns }}
+  labels:
+    app: observability-tokenrotate-service
+  annotations:
+    sidecar.istio.io/inject: "true"
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.foundation.observabilityTokenRotateService.maxSurge }}
+      maxUnavailable: {{ .Values.foundation.observabilityTokenRotateService.maxUnavailable }}
+  selector:
+    matchLabels:
+      app: observability-tokenrotate-service
+  template:
+    metadata:
+      labels:
+        app: observability-tokenrotate-service
+    spec:
+      serviceAccountName: observability-tokenrotate-service-sa
+     # terminationGracePeriodSeconds: {{ .Values.defaultTerminationGracePeriodSeconds }}
+      containers:
+      - name: token-rotate
+        image: gcr.io/sap-cx-dt-api-dev/{{ .Values.image.name }}:{{ .Values.image.tag }}
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: "1"
+            memory: 512Mi
+          requests:
+            cpu: 40m
+            memory: 50Mi
+        ports:
+          - name: http
+            containerPort: 8080
+        command: ["./src/service"]
+        env:
+          - name: GIN_MODE
+            valueFrom:
+              configMapKeyRef:
+                name: observability-config-map
+                key: GIN_MODE
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: observability-config-map
+                key: REDIS_HOST
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: observability-config-map
+                key: REDIS_PORT
+          - name: REDIS_DIALTIMEOUT
+            valueFrom:
+              configMapKeyRef:
+                name:  observability-config-map
+                key: REDIS_DIALTIMEOUT
+          - name: REDIS_READTIMEOUT
+            valueFrom:
+              configMapKeyRef:
+                name:  observability-config-map
+                key: REDIS_READTIMEOUT
+          - name: REDIS_WRITETIMEOUT
+            valueFrom:
+              configMapKeyRef:
+                name:  observability-config-map
+                key: REDIS_WRITETIMEOUT
+          - name: REDIS_POOLSIZE
+            valueFrom:
+              configMapKeyRef:
+                name:  observability-config-map
+                key: REDIS_POOLSIZE
+          - name: REDIS_POOLTIMEOUT
+            valueFrom:
+              configMapKeyRef:
+                name:  observability-config-map
+                key: REDIS_POOLTIMEOUT
+          - name: CONSOLIDATION_API_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: observability-config-map
+                key: CONSOLIDATION_API_INTERNAL_HOST
+          - name: CONSOLIDATION_API_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: observability-config-map
+                key: CONSOLIDATION_API_INTERNAL_PORT
+          - name: NewTenants_Intervals
+            valueFrom:
+              configMapKeyRef:
+                name: observability-config-map
+                key: NewTenants_Intervals
+          - name: ExpirationInterval
+            valueFrom:
+              configMapKeyRef:
+                name: observability-config-map
+                key: ExpirationInterval

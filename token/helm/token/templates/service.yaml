@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: observability-tokenrotate-service
+  namespace: {{ .Values.ns }}
+  labels:
+    app: observability-tokenrotate-service
+spec:
+  selector:
+    app: observability-tokenrotate-service
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
